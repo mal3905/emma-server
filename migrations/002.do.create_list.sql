@@ -1,0 +1,8 @@
+CREATE TABLE list (
+    id SERIAL PRIMARY KEY
+);
+
+ALTER TABLE list
+  ADD COLUMN
+    usersid INTEGER REFERENCES users(id)
+    ON DELETE SET NULL;
