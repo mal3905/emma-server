@@ -3,7 +3,7 @@ const CategoryService = {
       return knex.select('*').from('category')
     },
   
-    insertcategory(knex, newcategory) {
+    insertcategory(knex, newCategory) {
       return knex
         .insert(newCategory)
         .into('category')

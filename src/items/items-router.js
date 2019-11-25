@@ -7,32 +7,26 @@ const jsonParser = express.json()
 
 const serializeitem = item => ({
     id: item.id,
-    name: item.name
+    name: item.name,
+    categoryid: item.categoryid
 })
 
 itemsRouter
-    .route('/:categoryid')
+    .route('/')
     .get((req, res, next) => {
         const KnexInstance = req.app.get('db')
-        itemsService.getByCategory(KnexInstance, req.params.categoryid)
+        itemsService.getAllItems(KnexInstance)
         .then( items => {
-       
-            return res.json(items.map(serializeitem))
+            res.json(items.map(serializeitem))
         })
         .catch(next)
     })
-    //POST
     .post(jsonParser, (req, res, next) => {
         
-        const requiredFields = ['name']
-        const { name } = req.body
+        const requiredFields = ['name', 'categoryid']
+        const { name, categoryid } = req.body
         console.log(req.body)
-        const newItem = { 
-            name,
-            listid,
-            categoryid
-        
-        };
+        const newItem = { name, categoryid };
         for (const field of requiredFields){
             if(!(field in req.body)) {
                 return res.status(400).json({
@@ -46,7 +40,7 @@ itemsRouter
         )
         .then(item => {
             res
-                .status(200)
+                .status(201)
                 .location(path.posix.join(req.originalUrl + `/${item.id}`))
                 .json(serializeitem(item))
 
@@ -63,9 +57,9 @@ itemsRouter
             )
             .then(item => {
                 console.log(req.params.item_id, 'sdfdsfs')
-                    if(!item){
-                        return res.status(400).json({
-                            error: {message: `OOPS! item doesnt exist, you probably never added it `}
+                    if!item){
+                        return res.status(404).json({
+                            error: {message: `item doesn't exist`}
                         })
         
                     }
@@ -78,7 +72,7 @@ itemsRouter
         .get((req, res, next) => {
             res.json(serializeitem(res.item))
         })
-        .delete((req, res, next) => {
+        .delete((req, res, next) => {``
             itemsService.deleteItem(
                 req.app.get('db'),
                 req.params.item_id
@@ -89,20 +83,20 @@ itemsRouter
             .catch(next)
         })
         .patch(jsonParser, (req, res, next) => {
-            const {name} = req.body
-            const itemToUpdate = {name}
+            const {name, categoryid } = req.body
+            const itemToUpdate = {name, categoryid}
 
             const numberofValues = Object.values(itemToUpdate).filter(Boolean).length
             if(numberofValues === 0)
             return res.status(400).json({
                 error: {
-                    message: `Request body must contain name please :)`
+                    message: `Request body must contain name  and category id please :)`
                 }
             })
 
             itemsService.updateItem(
                 req.app.get('db'),
-                req,params.item_id,
+                req,params.itemid,
                 itemToUpdate
             )
             .then(numRowsAffected => {

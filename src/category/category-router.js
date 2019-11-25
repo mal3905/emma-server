@@ -22,21 +22,21 @@ CategoryRouter
     })
     .post(JsonParser, (req, res, next) => {
         const { name } = req.body;
-        const newcategory = { name }
+        const newCategory = { name }
 
         if(!name) {
             return res.status(400).json({
                 error: {
-                    message: `Missing Category name madame or Sir!`
+                    message: `Missing Category name`
                 }
             });
         }
 
         CategoryService.insertcategory(
             req.app.get('db'),
-            newcategory
+            newCategory
         )
-        .then(folder => {
+        .then(category => {
             res 
                 .status(201)
                 .location(path.posix.join(req.originalUrl, `/${category.id}`))
@@ -44,9 +44,11 @@ CategoryRouter
         })
         .catch(next)
     })
+
+
     CategoryRouter
         .route('/:categoryid')
-        .all((reql, res, next) => {
+        .all((req, res, next) => {
             CategoryService.getById(
                 req.app.get('db'),
                 req.params.categoryid
@@ -54,7 +56,7 @@ CategoryRouter
                 .then(category => {
                     if(!category) {
                         return res.status(404).json({
-                            error: {message: `OOPS! Cant find category, Sorry`}
+                            error: {message: `Sorry, category doesn't exist`}
                         })
                     }
                     res.category = category
@@ -66,6 +68,7 @@ CategoryRouter
         .get((req, res, next) => {
             res.json(serializeCategory(res.category))
         })
+
         .delete((req, res, next) => {
             CategoryService.deletecategory(
                 req.app.get('db'),

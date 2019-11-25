@@ -1,10 +1,4 @@
 const itemService = {
-   
-    getByCategory(knex, id) {
-        return knex.select('*').from('items')
-            .where('categoryid', id) 
-    },
-   
     getAllItems(knex) {
         return knex.select('*').from('items')
     },
