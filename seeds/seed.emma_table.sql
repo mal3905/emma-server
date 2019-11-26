@@ -11,6 +11,6 @@ VALUES
 ('coffee beans', 2),
 ('onions', 2),
 ('popcorn',2),
-('oranges', 1),
-('orange juice', 1)
+('oranges', 1)
+
 

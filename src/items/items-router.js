@@ -57,7 +57,7 @@ itemsRouter
             )
             .then(item => {
                 console.log(req.params.item_id, 'sdfdsfs')
-                    if!item){
+                    if(!item){
                         return res.status(404).json({
                             error: {message: `item doesn't exist`}
                         })
