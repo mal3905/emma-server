@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 const { expect } = require('chai')
 const supertest = require('supertest') //these 2 tests will run before any other test 
 
-process.env.TEST_DB_URL = process.env.TEST_DB_URL
+process.env.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL
   || "postgresql://dunder_mifflin@localhost/emma-test";
 
 
